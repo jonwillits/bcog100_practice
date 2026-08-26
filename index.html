@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<title>BCOG 100 — Practice Questions</title>
+<meta name="description" content="Practice questions for BCOG 100, Introduction to Brain and Cognitive Science, at the University of Illinois.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">BCOG 100 · Introduction to Brain and Cognitive Science</p>
+    <h1>Practice Questions</h1>
+  </div>
+</header>
+
+<main id="main" class="wrap" tabindex="-1">
+
+  <!-- ===================== module chooser ===================== -->
+  <section id="view-modules" hidden>
+    <p class="lede">
+      Nothing here is graded and nothing is reported to the instructor. Work through as many
+      questions as we like, in any order, as often as we like. Every multiple-choice answer comes
+      with an explanation of why it is right or why it is wrong — reading the explanations for the
+      options we did <em>not</em> choose is most of the value.
+    </p>
+    <p class="lede">
+      Progress is kept in this browser only, so a different computer or a private window starts
+      fresh.
+    </p>
+
+    <div class="bar bar-tight">
+      <h2 class="h-sec">Modules</h2>
+      <button class="link" id="wipe" type="button">Clear saved progress</button>
+    </div>
+    <ul class="grid" id="module-grid"></ul>
+  </section>
+
+  <!-- ===================== one module ===================== -->
+  <section id="view-module" hidden>
+    <nav class="crumbs">
+      <button class="link" id="back" type="button">← All modules</button>
+    </nav>
+
+    <h2 class="h-mod" id="mod-title"></h2>
+    <p class="sub" id="mod-sub"></p>
+
+    <div class="panel" id="setup">
+      <fieldset>
+        <legend>Topic</legend>
+        <div class="chips" id="pools"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Question type</legend>
+        <div class="chips" id="kinds"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Difficulty</legend>
+        <div class="chips" id="levels"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Focus</legend>
+        <div class="chips" id="focus"></div>
+      </fieldset>
+      <div class="row">
+        <button class="btn" id="start" type="button">Start practicing</button>
+        <button class="btn ghost" id="all-on" type="button">Select everything</button>
+        <span class="src" id="avail" role="status"></span>
+      </div>
+    </div>
+
+    <div class="bar" id="runbar" hidden>
+      <span id="count"></span>
+      <span id="tally"></span>
+    </div>
+    <div class="track" id="runtrack" hidden><div class="fill" id="fill"></div></div>
+
+    <div id="stage"></div>
+  </section>
+
+  <p class="empty" id="boot">Loading questions…</p>
+
+</main>
+
+<footer class="wrap foot-note">
+  <p>
+    Practice pools for BCOG 100 at the University of Illinois Urbana-Champaign.
+    These questions are study material, not an assessment.
+  </p>
+</footer>
+
+<script src="source.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
