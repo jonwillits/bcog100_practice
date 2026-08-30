@@ -14,7 +14,9 @@ That is a deliberate, temporary choice, made on 2026-08-26. It is worth being pr
 
 **What it does not protect against.** Anything at all beyond that. A student who has the URL can read `data/*.json` directly, and so can anyone they forward it to. No encryption or repository-obscurity scheme changes that, because a static site hands the browser everything it needs to render the page. Do not describe this site to students, or to anyone else, as though the bank were hidden.
 
-**Why that is acceptable for now.** The pools are meant to be practiced against, they will grow well past the point where memorizing them is easier than learning the material, and the alternative — the Canvas route — was costing more than it was worth. The Canvas route still works and is documented in `course_creation/tools/quiz_bank/README.md`; nothing here retires it.
+**Why that is acceptable.** The pools are meant to be practiced against, and they will grow well past the point where memorizing them is easier than learning the material.
+
+**There is no longer an alternative route.** Until 2026-08-30 this section said the Canvas route "still works... nothing here retires it," while `build_site.py` called Canvas the fallback and the tools README documented Canvas as the way in. That disagreement is what let this site go unpublished for four days while the banks moved underneath it — Module 0's live pool was missing a whole pool of 20 items and Module 1's was 45 items behind, days before the quizzes those pools feed. **The Canvas exporters are retired** (`course_creation/tools/quiz_bank/_to_delete/`), and this site is the only way questions reach students.
 
 **The route out.** `source.js` is the only file that knows where questions and progress come from. Replacing `StaticSource` with an `ApiSource` that fetches a sampled session from a server — and `LocalProgress` with an `ApiProgress` keyed to a student — hides the bank properly and makes progress follow a student between devices. That is a change to one file, not a rewrite, and the interface is documented at the top of it.
 
@@ -22,7 +24,7 @@ That is a deliberate, temporary choice, made on 2026-08-26. It is worth being pr
 
 ```
 index.html      the page shell
-styles.css      palette, spacing, and states, shared with the Canvas practice page
+styles.css      palette, spacing, and states
 source.js       QuestionSource + ProgressStore -- the only file that fetches or stores
 app.js          the interface: module grid, filters, a run, results
 favicon.svg
@@ -33,16 +35,28 @@ data/           GENERATED. Do not edit -- rebuild it (below)
 
 ## Rebuilding the questions
 
-The banks are the source of truth and are edited in the course tree, never here. From `current_version/`:
+The banks are the source of truth and are edited in the course tree, never here. Editing a bank changes nothing that students can see until the site is rebuilt and pushed. One command does all of it, from `current_version/`:
 
 ```bash
-python3 course_creation/tools/quiz_bank/audit_bank.py          # must pass first
-python3 course_creation/tools/quiz_bank/build_site.py          # writes data/ here
+python3 "/Users/jon/Library/CloudStorage/Box-Box/teaching/bcog_web/courses/introduction_to_brain_and_cognitive_science_1/current_version/course_creation/tools/quiz_bank/build_site.py" --push
 ```
 
-`build_site.py` writes one `NN_<slug>.json` per module plus an `index.json` listing all sixteen, so a module with no bank yet shows on the site as not available rather than being silently absent. Then commit and push this repo; GitHub Pages redeploys on push to `master`.
+That audits the banks, exports `data/`, commits, and pushes; GitHub Pages redeploys itself from the push, so the questions are live a minute or two later. If nothing changed it says so and does nothing.
 
-`build_site.py` and `build_practice.py` share `to_json()`, so the website and the Canvas page can never disagree about what an item means.
+```bash
+python3 course_creation/tools/quiz_bank/build_site.py --check   # is the site behind the banks?
+python3 course_creation/tools/quiz_bank/build_site.py           # export only, no commit
+```
+
+**`--push` refuses to publish a bank with audit errors.** On this site a push *is* publication, with no second gate behind it, so the audit is the only thing standing between a broken item and a student reading it. `--skip-audit` exists and should stay unused.
+
+**Run it from a terminal, not through a Cowork bridge session.** Git cannot clean up its own lock files over the bridge mount, and leaves a stale `.git/index.lock` behind on every command.
+
+`build_site.py` writes one `NN_<slug>.json` per module plus an `index.json` listing all sixteen, so a module with no bank yet shows on the site as not available rather than being silently absent. The item serializer lives in `course_creation/tools/quiz_bank/item_json.py`.
+
+One thing `--check` is good for: it is the honest answer to "is what students can see current?", and it belongs in `CHECKPOINT.md` beside the course build's own check — this is the one check that catches a bank edited and never published.
+
+**Do not run the bare export as a substitute for pushing.** `build_site.py` with no flags writes `data/` and stops, after which `--check` reports the site current while students still see the old pool. If you export, push.
 
 ## Working on the site locally
 
@@ -61,7 +75,7 @@ Progress is per item, per module, in this browser's `localStorage`: how many tim
 
 ## Accessibility
 
-Carried over from the Canvas practice page and to be preserved through any redesign: real `<button>` elements throughout, so keyboard and screen-reader navigation work without help; visible focus outlines; `aria-pressed` on the filter chips; a live region announcing whether an answer was correct; colour never the only signal for right and wrong (a ✓/✕ carries it too); a light and a dark palette both meeting contrast requirements; and reduced motion respected.
+To be preserved through any redesign: real `<button>` elements throughout, so keyboard and screen-reader navigation work without help; visible focus outlines; `aria-pressed` on the filter chips; a live region announcing whether an answer was correct; colour never the only signal for right and wrong (a ✓/✕ carries it too); a light and a dark palette both meeting contrast requirements; and reduced motion respected.
 
 ## Two constraints on any edit
 
