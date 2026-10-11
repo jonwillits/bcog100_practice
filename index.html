@@ -21,13 +21,42 @@
 
 <main id="main" class="wrap" tabindex="-1">
 
+  <!-- ===================== settings ===================== -->
+  <!-- One panel, reachable from the module grid and from every module page.
+       It sits above whichever view is showing. -->
+  <section id="view-settings" class="panel settings" hidden aria-labelledby="settings-title">
+    <div class="bar bar-tight">
+      <h2 class="h-sec" id="settings-title" tabindex="-1">Settings</h2>
+      <button class="link" id="settings-close" type="button">Close</button>
+    </div>
+    <fieldset>
+      <legend>Mastery level</legend>
+      <p class="hint">A topic counts as mastered when a check scores at least this. Changing it updates every topic at once.</p>
+      <div class="chips" id="set-level"></div>
+    </fieldset>
+    <fieldset>
+      <legend>Review share</legend>
+      <p class="hint">How much of each practice set is drawn from topics we have already worked, here and in other modules.</p>
+      <div class="chips" id="set-share"></div>
+    </fieldset>
+    <fieldset>
+      <legend>Review from</legend>
+      <p class="hint">Which modules review questions may come from.</p>
+      <div class="chips" id="set-scope"></div>
+    </fieldset>
+  </section>
+
   <!-- ===================== module chooser ===================== -->
   <section id="view-modules" hidden>
     <p class="lede">
-      Nothing here is graded and nothing is reported to the instructor. Work through as many
-      questions as we like, in any order, as often as we like. Every multiple-choice answer comes
-      with an explanation of why it is right or why it is wrong — reading the explanations for the
-      options we did <em>not</em> choose is most of the value.
+      Nothing here is graded and nothing is reported to the instructor. Nobody is expected to work
+      every question; there are far more than anyone needs. Each module is divided into topics, and a
+      topic is done when we check it: ten questions, drawn from ones we have not seen, and a score at
+      or above our mastery level (90% unless we change it in Settings) marks the topic mastered. Two
+      weeks later the site brings it back for review, and every practice set mixes in a few review
+      questions from topics we have already worked. Every multiple-choice answer comes with an
+      explanation of why it is right or why it is wrong. Reading the explanations for the options we
+      did <em>not</em> choose is most of the value.
     </p>
     <p class="lede">
       Progress is kept in this browser only, so a different computer or a private window starts
@@ -36,40 +65,65 @@
 
     <div class="bar bar-tight">
       <h2 class="h-sec">Modules</h2>
-      <button class="link" id="wipe" type="button">Clear saved progress</button>
+      <span class="row links">
+        <button class="link" id="settings-open" type="button">Settings</button>
+        <button class="link" id="wipe" type="button">Clear saved progress</button>
+      </span>
     </div>
     <ul class="grid" id="module-grid"></ul>
   </section>
 
   <!-- ===================== one module ===================== -->
   <section id="view-module" hidden>
-    <nav class="crumbs">
+    <nav class="crumbs bar bar-tight">
       <button class="link" id="back" type="button">← All modules</button>
+      <button class="link" id="settings-open-2" type="button">Settings</button>
     </nav>
 
     <h2 class="h-mod" id="mod-title"></h2>
     <p class="sub" id="mod-sub"></p>
 
-    <div class="panel" id="setup">
+    <div class="panel" id="quiz-panel" hidden>
+      <h3 class="h-sec">Prepare for a quiz</h3>
+      <p class="hint">Pick a lecture. The check draws five multiple-choice questions from each of its topics, one per claim and preferring ones we have not seen, from the core and standard questions the in-class quiz uses. The result is reported topic by topic and does not change any topic's status. The size, filters, and review share below do not apply here.</p>
+      <div class="chips" id="quiz-lectures"></div>
+    </div>
+
+    <div class="panel" id="setup" hidden>
+      <div class="bar bar-tight">
+        <h3 class="h-sec">Practice specific topics</h3>
+        <span class="row links">
+          <button class="link" id="all-on" type="button">Select all</button>
+          <button class="link" id="none-on" type="button">Select none</button>
+          <button class="link" id="mod-reset" type="button">Reset this module</button>
+        </span>
+      </div>
+      <p class="hint"><strong>Check this topic</strong> asks ten multiple-choice questions from that topic alone, one per claim, at every difficulty, preferring ones we have not seen. It ignores the size, filters, and review share below; the mastery level in Settings decides whether it counts as mastered.</p>
+      <p class="hint"><strong>Start practicing</strong>, at the bottom, draws from the topics selected here, at the size and filters chosen below, with the review share from Settings mixed in from topics already worked.</p>
+      <div id="topics"></div>
+
+      <h3 class="h-sec practice-head">Start practicing the selected topics</h3>
       <fieldset>
-        <legend>Topic</legend>
-        <div class="chips" id="pools"></div>
-      </fieldset>
-      <fieldset>
-        <legend>Question type</legend>
-        <div class="chips" id="kinds"></div>
-      </fieldset>
-      <fieldset>
-        <legend>Difficulty</legend>
-        <div class="chips" id="levels"></div>
+        <legend>Set size</legend>
+        <div class="chips" id="sizes"></div>
       </fieldset>
       <fieldset>
         <legend>Focus</legend>
         <div class="chips" id="focus"></div>
       </fieldset>
+      <details class="more" id="more">
+        <summary>More filters</summary>
+        <fieldset>
+          <legend>Question type</legend>
+          <div class="chips" id="kinds"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Difficulty</legend>
+          <div class="chips" id="levels"></div>
+        </fieldset>
+      </details>
       <div class="row">
         <button class="btn" id="start" type="button">Start practicing</button>
-        <button class="btn ghost" id="all-on" type="button">Select everything</button>
         <span class="src" id="avail" role="status"></span>
       </div>
     </div>
@@ -95,6 +149,7 @@
 </footer>
 
 <script src="source.js"></script>
+<script src="study.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
