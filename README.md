@@ -79,7 +79,7 @@ cd bcog100_practice && python3 -m http.server 8899
 
 **Prepare for a quiz** runs a check across every topic in one lecture, core and standard items only — what the in-class quiz draws from — and reports the result per topic without changing any topic's status.
 
-Multiple choice is answered in one click and every option's explanation appears at once — including the options not chosen, which is most of the value. Short answer is self-scored against a model answer and rubric, never counts toward a score, and is never in a check. Each module is addressable as `#/m/<slug>` so a student can bookmark the one they are working on. The source locator of an item is not shown; students cannot resolve a claim id, and `ITEM_WRITING_RULES.md` rule 8.4 says locators never reach them.
+Multiple choice is answered in one click and every option's explanation appears at once — including the options not chosen, which is most of the value. Short answer is self-scored against a model answer and rubric, never counts toward a score, and is never in a check. Each module is addressable as `#/m/<slug>` so a student can bookmark the one they are working on. After an answer, the footer shows the item's id and its `source` entries. The id is for us, when a student reports a question; the claim ids are the reading outline's, for anyone who wants to look the point up. (Rule 8.4 of `ITEM_WRITING_RULES.md` keeps locators out of stems and options, where they would give an answer away; a footer after the answer is not that.)
 
 ### What is stored
 

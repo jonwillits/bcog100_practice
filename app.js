@@ -648,6 +648,19 @@ function nextButton(label) {
   return button("btn", label, function () { at++; render(); });
 }
 
+/* The item's id and its source entries, shown only after an answer. The id is
+   for us, when a student reports a question; the claim ids are the reading
+   outline's, for anyone who wants to look the point up. Restored 2026-10-11
+   at Jon's request, reversing the spec's decision to drop the footer. */
+function reference(item) {
+  var span = make("span", "src", item.id);
+  if (item.source && item.source.length) {
+    span.appendChild(document.createTextNode(" · "));
+    span.appendChild(rich("span", null, item.source.join("; ")));
+  }
+  return span;
+}
+
 function render() {
   progress();
   el.stage.innerHTML = "";
@@ -736,6 +749,7 @@ function renderMC(card, item) {
 
     var foot = make("div", "foot");
     var next = nextButton(at + 1 >= queue.length ? "See results" : "Next question");
+    foot.appendChild(reference(item));
     foot.appendChild(next);
     card.appendChild(foot);
 
@@ -790,6 +804,7 @@ function renderSA(card, item) {
     // Short answer is self-scored, so it never touches the tally of correct
     // answers — only the count of questions worked.
     showBtn.remove();
+    foot.appendChild(reference(item));
     foot.appendChild(nextButton(at + 1 >= queue.length ? "See results" : "Next question"));
     progress();
   });
